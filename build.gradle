@@ -1,0 +1,49 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.0'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.comfycoding'
+version = '0.0.1-SNAPSHOT'
+description = 'URL shortener'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(20)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.mongodb:mongodb-driver-sync:4.11.1'
+	//SpringBoot  libraries
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//SpringBoot Mongodb connector library
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	//Annotation support to reduce boilerplate code
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	//test libraries
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testCompileOnly 'org.projectlombok:lombok:1.18.32'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+task runKeyGenerator(type: JavaExec) {
+	group = 'application'
+	description = 'Runs the KeyGeneratorCode to load keys into MongoDB'
+	mainClass = 'com.comfycoding.urlshortener.keyloader.KeyGeneratorCode'
+	classpath = sourceSets.main.runtimeClasspath
+}
